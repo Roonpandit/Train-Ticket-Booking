@@ -20,10 +20,18 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.ALLOWED_ORIGINS.split(","),
+    origin: function (origin, callback) {
+      const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",");
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));

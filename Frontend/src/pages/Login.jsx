@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { toast } from 'react-toastify';
-import "./Login.css"
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
+import "./Login.css";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
@@ -32,26 +32,26 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.email || !formData.password) {
-      toast.error('Please provide email and password');
+      toast.error("Please provide email and password");
       return;
     }
-    
+
     setLoading(true);
-    
+
     try {
       const userData = await login(formData.email, formData.password);
-      toast.success('Login successful');
-      
+      toast.success("Login successful");
+
       // Redirect based on user role
-      if (userData && userData.role === 'admin') {
-        navigate('/admin/dashboard');
+      if (userData && userData.role === "admin") {
+        navigate("/admin/dashboard");
       } else {
-        navigate('/user/booking');
+        navigate("/user/booking");
       }
     } catch (error) {
-      toast.error(error || 'Login failed');
+      toast.error(error || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -65,18 +65,24 @@ const Login = () => {
             <div className="skeleton skeleton-title"></div>
             <div className="auth-form">
               <div className="form-group">
-                <div className="skeleton skeleton-text" style={{ width: '30%' }}></div>
+                <div
+                  className="skeleton skeleton-text"
+                  style={{ width: "30%" }}
+                ></div>
                 <div className="skeleton skeleton-input"></div>
               </div>
-              
+
               <div className="form-group">
-                <div className="skeleton skeleton-text" style={{ width: '40%' }}></div>
+                <div
+                  className="skeleton skeleton-text"
+                  style={{ width: "40%" }}
+                ></div>
                 <div className="skeleton skeleton-input"></div>
               </div>
-              
+
               <div className="skeleton skeleton-button"></div>
             </div>
-            
+
             <div className="skeleton skeleton-link"></div>
           </>
         ) : (
@@ -90,13 +96,19 @@ const Login = () => {
                   id="email"
                   name="email"
                   value={formData.email}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      email: e.target.value.toLowerCase(),
+                    });
+                  }}
                   className="form-control"
                   placeholder="Enter your email"
                   required
+                  style={{ textTransform: "lowercase" }}
                 />
               </div>
-              
+
               <div className="form-group">
                 <label htmlFor="password">Password</label>
                 <input
@@ -110,14 +122,14 @@ const Login = () => {
                   required
                 />
               </div>
-              
+
               <button type="submit" disabled={loading} className="auth-button">
-                {loading ? 'Logging in...' : 'Login'}
+                {loading ? "Logging in..." : "Login"}
               </button>
             </form>
-            
+
             <div className="auth-footer">
-              Don't have an account?{' '}
+              Don't have an account?{" "}
               <Link to="/register" className="auth-link">
                 Register
               </Link>
